@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class GameMangager{
     constructor(height,width, connections){
         this.connections = connections
