@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Slider from "@mui/material/Slider";
 import { Height } from "@mui/icons-material";
+import { Box } from "@mui/material";
 
 const CreationScreen = (props) => {
   const [connections, setConnections] = useState(4);
   const [playHeight, setPlayHeight] = useState(6);
   const [playWidth, setPlayWidth] = useState(7);
+
+
+
+  useEffect(()=>{
+    if(connections < playHeight){
+      setPlayHeight(connections)
+      console.log("height Updated")
+    }
+    if(connections < playWidth){
+      setPlayWidth(connections)
+      console.log("width Updated")
+    }
+  },[connections])
 
   function setConnectionsValue(event, newValue) {
     setConnections(newValue);
@@ -20,12 +34,26 @@ const CreationScreen = (props) => {
     setPlayWidth(newValue);
   }
 
+  /* To be fixed. Not important now. */
+  function returnCircles(cons){
+    for(let i=0; i<cons;i++){
+      return(
+        <Box
+        sx={{
+          color: "cyan"
+        }}
+        >
+        </Box>
+      )
+
+    }
+  }
+
   return (
     <div className="playBox">
       <div className="connectionBox">
         <h2 id="connectionDisplay">{connections}</h2>
         <h3>Connections for victory</h3>
-
         <Slider
           sx={{
             width: "200px",
@@ -52,11 +80,12 @@ const CreationScreen = (props) => {
             margin: "20px",
           }}
           value={playHeight}
+          defaultValue={connections+1}
           orientation="vertical"
           onChange={setHeight}
           step={1}
           marks
-          min={5}
+          min={connections}
           max={9}
         />
         <Slider
@@ -66,6 +95,7 @@ const CreationScreen = (props) => {
             color: "white",
             margin: "20px",
           }}
+          defaultValue={connections+1}
           value={playWidth}
           onChange={setWidth}
           step={1}
