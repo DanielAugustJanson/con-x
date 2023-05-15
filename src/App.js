@@ -1,11 +1,14 @@
 import './App.css';
-import CreationScreen from './components/CreationScreen';
 
 function App() {
   return (
-    <div className="App">
-      <CreationScreen/>
+    <>
+    <div>
+      <Test/>
     </div>
+    <div className="App">
+    </div>
+    </>
   );
 }
 
