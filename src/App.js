@@ -1,7 +1,4 @@
 import './App.css';
-import Test from './components/Test';
-
-
 
 function App() {
   return (
@@ -10,7 +7,6 @@ function App() {
       <Test/>
     </div>
     <div className="App">
-      <p>S</p>
     </div>
     </>
   );
