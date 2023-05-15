@@ -1,15 +1,15 @@
 import './App.css';
+import CreationScreen from './components/CreationScreen';
+
 
 function App() {
+
   return (
-    <>
     <div>
-      <Test/>
+      <CreationScreen></CreationScreen>
     </div>
-    <div className="App">
-    </div>
-    </>
-  );
+  )
+
 }
 
 export default App;

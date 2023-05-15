@@ -1,0 +1,67 @@
+.playBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  
+  
+  .connectionBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: solid white 1px;
+    border-radius: 50px;
+    background-color: rgb(87, 87, 87);
+    min-width: 500px;
+  }
+  
+  .gameSizeBox{
+    position: relative;
+    min-width: 500px;
+    min-height: 500px;
+    background-color: rgb(87, 87, 87);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  
+  .connectionBox *{
+    color: white;
+  }
+  
+  #connectionDisplay{
+    font-size: 5rem;
+    margin: 25px;
+  }
+  
+  #vertSlider{
+  position: absolute;
+  left: 0%;
+  }
+  
+  #horiSlider{
+    position: absolute;
+    bottom: 0%;
+  }
+  
+  #sizeDisplay{
+    position: relative;
+    top: 0;
+    left: 0;
+    color: white;
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 3.5rem;
+    
+  }
+
+  Button{
+    color: white;
+  }

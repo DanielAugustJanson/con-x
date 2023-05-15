@@ -1,8 +1,10 @@
 // eslint-disable-next-line no-unused-vars
+
+import Layout from "./LayoutGenerator"
+
+
 class GameMangager{
-    constructor(height,width, connections){
-        this.connections = connections
-        this.playArea = [height,width]
+    constructor(){
 
         this.gameStates = {
             0: "idle",
@@ -23,10 +25,30 @@ class GameMangager{
             3: "draw"
         }
 
-        /* Sets maximum value for the amount of turns game can have, and keeps in track of how many turns have been taken */
-        this.maxMoves = height*width;
-        this.move = 0;
+        this.connections = null;
+        this.playArea = null;
+        this.maxMoves = null
+        this.layout = null;
 
+        this.move = 0;
+        this.gameState = this.gameStates[0]
+        this.turn = this.turns[0]
+        this.outcome = this.outcomes[0]
+        this.outPut= null;
+
+        
+    }
+
+    startGame(){
+        this.gameState = this.gameStates[1]
+        this.turn = this.turns[1]
+    }
+
+    restartGame(){
+        this.connections = null
+        this.playArea = null;
+        this.maxMoves = null
+        this.move = 0;
         this.gameState = this.gameStates[0]
         this.turn = this.turns[0]
         this.outcome = this.outcomes[0]
@@ -70,3 +92,5 @@ class GameMangager{
     }
 
 }
+
+export default GameMangager;
