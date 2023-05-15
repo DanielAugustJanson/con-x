@@ -1,22 +1,39 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import CS from './CS'
+import LG from './LG'
 
 const GM = props => {
 
-    const [gamestate, setGameSet] = useState(0)
-    const [gameConditions, setGmaeConditions] = useState([0,0,0])
+    /* Gamestates 0 - Idle, 1 - Ongoing, 2 - Finished */
+    const [gameState, setGameState] = useState(0)
+    const [gameConditions, setGameConditions] = useState([0,0,0])
+    let output;
 
-    const startGame = () => {
+
+    const onGameStart = (conditions) =>{
+        setGameConditions(conditions)
+        console.log(conditions)
+        setGameState(1)
         
     }
 
+    switch(gameState){
+        case(0):
+            output = <CS onStart={onGameStart}></CS>
+            console.log("Game state 0")
+            break;
+        case(1):
+            output = <LG layout={gameConditions} ></LG>;
+            console.log("Game state 1")
+            break;
+        default:
+            output = null;
+            console.log("Game state default")
+            break;
+    }
 
-
-
-
-  return (
-    <div>GM</div>
-  )
+  return (output)
 }
 
 GM.propTypes = {}

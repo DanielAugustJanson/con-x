@@ -1,0 +1,44 @@
+.grid {
+    align-self: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 0 auto;
+  }
+
+
+.grid-cell{
+    width: 8vh;
+    height: 8vh;
+    background-color: rgb(197, 197, 197);
+    border-radius: 50%;
+    margin: 10px;
+}
+
+.grid-col{
+  display: flex;
+  flex-direction: column-reverse;
+  border: solid 2px rgba(255, 255, 255, 0);
+}
+
+.grid-col:hover{
+  display: flex;
+  flex-direction: column-reverse;
+  border: solid 2px orange;
+  border-radius: 30px;
+}
+
+.gameScreen{
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+}
+
+.red{
+  background-color: rgb(253, 86, 86);
+}
+
+.blue{
+  background-color: rgb(68, 68, 255);
+}
+

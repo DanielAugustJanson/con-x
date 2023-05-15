@@ -1,12 +1,13 @@
 import './App.css';
-import CreationScreen from './components/CreationScreen';
+import GM from './components/GM';
+
 
 
 function App() {
 
   return (
     <div>
-      <CreationScreen></CreationScreen>
+      <GM></GM>
     </div>
   )
 
