@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./LG.css";
+import { Button } from "@mui/material";
 
-const LG = (props) => {
+const LG = (props,{onEnd}) => {
   const [playerTurn, setPlayerTurn] = useState(1);
   const [gameTurn, setGameTurn] = useState(1);
   const height = props.layout[0];
@@ -10,46 +11,46 @@ const LG = (props) => {
   const connections = props.layout[2];
   const maxTurns = props.layout[0] * props.layout[1];
 
-  //Grid Control  WIDTH - COL HEIGHT - ROW
   const gridStateInitial = Array(width)
     .fill()
     .map(() => Array(height).fill(""));
 
   const [gridState, setGridState] = useState(gridStateInitial);
-
-  //////////////////////////////////////////////////////////////
+  const [winner, setWinner] = useState(null);
+  
 
   const togglePlayerTurns = () => {
-    if (playerTurn == 1) {
+    if (playerTurn === 1) {
       setPlayerTurn(2);
-    }
-    if (playerTurn == 2) {
+    } else if (playerTurn === 2) {
       setPlayerTurn(1);
     }
   };
 
-  //////////////////////////////////////////////////////////
+///////////////////////////
 
   const handleCellClick = (col) => {
     const row = getBottomEmptyRow(col);
-    if (row !== -1) {
+    if (row !== -1 || winner) {
       const updatedGridState = [...gridState];
       updatedGridState[col][row] = playerTurn === 1 ? "red" : "blue";
       setGridState(updatedGridState);
       togglePlayerTurns();
-      setGameTurn(gameTurn + 1);
       const hasWon = checkWin(
         updatedGridState,
         playerTurn === 1 ? "red" : "blue",
         connections
       );
       if (hasWon) {
-        window.alert(`Player ${playerTurn} wins!`);
+        setWinner(playerTurn);
       } else if (gameTurn === maxTurns) {
-        window.alert("It's a draw!");
+        setWinner("draw");
       }
+      setGameTurn(gameTurn + 1);
     }
   };
+
+
 
   const getBottomEmptyRow = (col) => {
     for (let i = 0; i < height; i++) {
@@ -99,6 +100,7 @@ const LG = (props) => {
     return false;
   };
 
+
   const generateLayout = () => {
     const grid = [];
 
@@ -134,7 +136,39 @@ const LG = (props) => {
     );
   };
 
-  return generateLayout();
+  
+
+  const GameResult = () => {
+    let message = "";
+    if (winner === 1 || winner === 2) {
+      message = `Player ${winner} wins in ${gameTurn} moves!`;
+    } else if (winner === "draw") {
+      message = "It's a draw!";
+    }
+
+    function RestartGame(){
+      props.onGameEnd()
+    }
+
+
+    return (
+      <div className="game-result-bg">
+        <div className="game-result-box">
+          <h3>{message}</h3>
+          
+          <Button variant="outlined" 
+          onClick={RestartGame}>Restart</Button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {generateLayout()}
+      {winner && <GameResult />}
+    </>
+  );
 };
 
 LG.propTypes = {};

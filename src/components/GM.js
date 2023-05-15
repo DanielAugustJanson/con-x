@@ -18,6 +18,11 @@ const GM = props => {
         
     }
 
+    const onGameReset = () => {
+        setGameState(0)
+        setGameConditions([0,0,0])
+    }
+
     switch(gameState){
         case(0):
             output = <CS onStart={onGameStart}></CS>
