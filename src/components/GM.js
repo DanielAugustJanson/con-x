@@ -29,7 +29,7 @@ const GM = props => {
             console.log("Game state 0")
             break;
         case(1):
-            output = <LG layout={gameConditions} ></LG>;
+            output = <LG layout={gameConditions} onGameEnd={onGameReset} ></LG>;
             console.log("Game state 1")
             break;
         default:

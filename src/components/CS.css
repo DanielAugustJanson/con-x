@@ -66,4 +66,8 @@
 
   Button{
     color: white;
+    border-color: white;
+    width: 150px;
+    height: 70px;
+    border-radius: 35px;
   }
