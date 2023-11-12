@@ -6,10 +6,13 @@ import { Box, Button } from "@mui/material";
 import { functionTypeAnnotation } from "@babel/types";
 import "./CS.css";
 
+//CREATE SCREEN
+
 const CS = ({onStart}) => {
   const [connections, setConnections] = useState(4);
   const [playHeight, setPlayHeight] = useState(6);
   const [playWidth, setPlayWidth] = useState(7);
+  const [playAgainstAI, setPlayAgainstAI] = useState(false); // Added state for AI option
 
   function setConnectionsValue(event, newValue) {
     setConnections(newValue);
@@ -29,7 +32,7 @@ const CS = ({onStart}) => {
       window.alert("Game size cannot be smaller than connections");
     } else {
       console.log("Values correct, transmitting to GM")
-      onStart([playHeight,playWidth,connections])
+      onStart([playHeight,playWidth,connections,playAgainstAI])
     }
   }
 
@@ -89,6 +92,15 @@ const CS = ({onStart}) => {
             max={9}
           />
         </div>
+        <div className="gameAICheckbox">
+        
+          <h5>Play Against AI:</h5>
+          <input
+            type="checkbox"
+            checked={playAgainstAI}
+            onChange={() => setPlayAgainstAI(!playAgainstAI)}
+          />
+      </div>
         <div>
           <Button variant="outlined"
           onClick={checkStartConditions}

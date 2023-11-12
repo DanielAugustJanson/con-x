@@ -64,6 +64,21 @@
     
   }
 
+  .gameAICheckbox{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  }
+
+  
+  .gameAICheckbox h5{
+    font-size: 1.5rem;
+    color: white;
+  }
+  .gameAICheckbox input{
+
+  }
+
   Button{
     color: white;
     border-color: white;

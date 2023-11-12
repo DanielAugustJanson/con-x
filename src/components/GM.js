@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import CS from './CS'
 import LG from './LG'
 
+//GameManager
+
 const GM = props => {
 
     /* Gamestates 0 - Idle, 1 - Ongoing, 2 - Finished */
     const [gameState, setGameState] = useState(0)
-    const [gameConditions, setGameConditions] = useState([0,0,0])
+    const [gameConditions, setGameConditions] = useState([0,0,0,0])
     let output;
 
 

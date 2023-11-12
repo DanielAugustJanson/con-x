@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./LG.css";
 import { Button } from "@mui/material";
+
+//LayoutGenerator
 
 const LG = (props,{onEnd}) => {
   const [playerTurn, setPlayerTurn] = useState(1);
@@ -10,6 +12,51 @@ const LG = (props,{onEnd}) => {
   const width = props.layout[1];
   const connections = props.layout[2];
   const maxTurns = props.layout[0] * props.layout[1];
+  const aiEnabled = props.layout[3]
+
+///////////////////// AI Move
+
+const getAvailableColumns = () => {
+  const availableColumns = [];
+  for (let col = 0; col < width; col++) {
+    if (gridState[col][0] === '') {
+      availableColumns.push(col);
+    }
+  }
+  return availableColumns;
+};
+
+const makeAiMove = () => {
+  if (playerTurn === 2) {
+    const availableColumns = getAvailableColumns();
+    const randomColumn = availableColumns[Math.floor(Math.random() * availableColumns.length)];
+
+    setTimeout(() => {
+      const row = getBottomEmptyRow(randomColumn);
+      if (row !== -1 || winner) {
+        const updatedGridState = [...gridState];
+        updatedGridState[randomColumn][row] = 'blue'; // Assuming AI color is blue
+        setGridState(updatedGridState);
+        togglePlayerTurns();
+        const hasWon = checkWin(updatedGridState, 'blue', connections); // Assuming AI color is blue
+        if (hasWon) {
+          setWinner(2);
+        } else if (gameTurn === maxTurns) {
+          setWinner('draw');
+        }
+        setGameTurn(gameTurn + 1);
+      }
+    }, 500); // Delay in milliseconds
+  }
+};
+
+  useEffect(() => {
+    if (aiEnabled && playerTurn === 2) {
+      makeAiMove();
+    }
+  }, [aiEnabled, playerTurn]);
+  
+///////////////////////////////////
 
   const gridStateInitial = Array(width)
     .fill()
@@ -19,6 +66,7 @@ const LG = (props,{onEnd}) => {
   const [winner, setWinner] = useState(null);
   
 
+
   const togglePlayerTurns = () => {
     if (playerTurn === 1) {
       setPlayerTurn(2);
@@ -27,28 +75,28 @@ const LG = (props,{onEnd}) => {
     }
   };
 
+  
+
 ///////////////////////////
 
-  const handleCellClick = (col) => {
+const handleCellClick = (col) => {
+  if (!aiEnabled || playerTurn === 1) {
     const row = getBottomEmptyRow(col);
     if (row !== -1 || winner) {
       const updatedGridState = [...gridState];
-      updatedGridState[col][row] = playerTurn === 1 ? "red" : "blue";
+      updatedGridState[col][row] = playerTurn === 1 ? 'red' : 'blue';
       setGridState(updatedGridState);
       togglePlayerTurns();
-      const hasWon = checkWin(
-        updatedGridState,
-        playerTurn === 1 ? "red" : "blue",
-        connections
-      );
+      const hasWon = checkWin(updatedGridState, playerTurn === 1 ? 'red' : 'blue', connections);
       if (hasWon) {
         setWinner(playerTurn);
       } else if (gameTurn === maxTurns) {
-        setWinner("draw");
+        setWinner('draw');
       }
       setGameTurn(gameTurn + 1);
     }
-  };
+  }
+};
 
 
 
@@ -100,6 +148,8 @@ const LG = (props,{onEnd}) => {
     return false;
   };
 
+  ///Layout Generator
+
 
   const generateLayout = () => {
     const grid = [];
@@ -136,6 +186,8 @@ const LG = (props,{onEnd}) => {
     );
   };
 
+
+  //GameRestult Message
   
 
   const GameResult = () => {
