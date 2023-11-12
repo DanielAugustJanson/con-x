@@ -2,59 +2,60 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./LG.css";
 import { Button } from "@mui/material";
+import AI from "./AI"
+
 
 //LayoutGenerator
 
-const LG = (props,{onEnd}) => {
+const LG = (props, { onEnd }) => {
   const [playerTurn, setPlayerTurn] = useState(1);
   const [gameTurn, setGameTurn] = useState(1);
   const height = props.layout[0];
   const width = props.layout[1];
   const connections = props.layout[2];
   const maxTurns = props.layout[0] * props.layout[1];
-  const aiEnabled = props.layout[3]
+  const aiEnabled = props.layout[3];
 
-///////////////////// AI Move
+  const ai = AI()
 
-const getAvailableColumns = () => {
-  const availableColumns = [];
-  for (let col = 0; col < width; col++) {
-    if (gridState[col][0] === '') {
-      availableColumns.push(col);
+
+
+///////////////////// AI Move integration
+
+  const handleAiMove = (col) => {
+  const row = getBottomEmptyRow(col);
+  if (row !== -1 && !winner && gameTurn < maxTurns) {
+    const updatedGridState = [...gridState];
+    updatedGridState[col][row] = playerTurn === 1 ? 'red' : 'blue';
+    setGridState(updatedGridState);
+    togglePlayerTurns();
+    const hasWon = checkWin(updatedGridState, playerTurn === 1 ? 'red' : 'blue', connections);
+    if (hasWon) {
+      setWinner(playerTurn);
+    } else if (gameTurn === maxTurns - 1) {
+      setWinner('draw');
     }
-  }
-  return availableColumns;
-};
-
-const makeAiMove = () => {
-  if (playerTurn === 2) {
-    const availableColumns = getAvailableColumns();
-    const randomColumn = availableColumns[Math.floor(Math.random() * availableColumns.length)];
-
-    setTimeout(() => {
-      const row = getBottomEmptyRow(randomColumn);
-      if (row !== -1 || winner) {
-        const updatedGridState = [...gridState];
-        updatedGridState[randomColumn][row] = 'blue'; // Assuming AI color is blue
-        setGridState(updatedGridState);
-        togglePlayerTurns();
-        const hasWon = checkWin(updatedGridState, 'blue', connections); // Assuming AI color is blue
-        if (hasWon) {
-          setWinner(2);
-        } else if (gameTurn === maxTurns) {
-          setWinner('draw');
-        }
-        setGameTurn(gameTurn + 1);
-      }
-    }, 500); // Delay in milliseconds
+    setGameTurn(gameTurn + 1);
   }
 };
 
+  // AI Move
   useEffect(() => {
     if (aiEnabled && playerTurn === 2) {
+      console.log("Use Effect Working, AI's turn");
       makeAiMove();
     }
   }, [aiEnabled, playerTurn]);
+  
+  const makeAiMove = () => {
+    if (playerTurn === 2) {
+      const bestMove = ai.getBestMove(gridState, playerTurn, 0);
+      console.log("makeAiMove function called");
+      console.log(bestMove);
+      handleAiMove(bestMove);
+    }
+  };
+
   
 ///////////////////////////////////
 
@@ -77,12 +78,12 @@ const makeAiMove = () => {
 
   
 
-///////////////////////////
+// Handle Next Move
 
 const handleCellClick = (col) => {
-  if (!aiEnabled || playerTurn === 1) {
+  if (!aiEnabled || (aiEnabled && playerTurn === 1)) {
     const row = getBottomEmptyRow(col);
-    if (row !== -1 || winner) {
+    if (row !== -1 && !winner && gameTurn < maxTurns) {
       const updatedGridState = [...gridState];
       updatedGridState[col][row] = playerTurn === 1 ? 'red' : 'blue';
       setGridState(updatedGridState);
@@ -90,7 +91,8 @@ const handleCellClick = (col) => {
       const hasWon = checkWin(updatedGridState, playerTurn === 1 ? 'red' : 'blue', connections);
       if (hasWon) {
         setWinner(playerTurn);
-      } else if (gameTurn === maxTurns) {
+      } else if (gameTurn === maxTurns - 1) {
+        // Adjusted the condition to consider the current move
         setWinner('draw');
       }
       setGameTurn(gameTurn + 1);
@@ -99,15 +101,17 @@ const handleCellClick = (col) => {
 };
 
 
-
-  const getBottomEmptyRow = (col) => {
-    for (let i = 0; i < height; i++) {
-      if (gridState[col][i] === "") {
-        return i;
+const getBottomEmptyRow = (col) => {
+  // Check if gridState[col] exists
+  if (gridState[col]) {
+      for (let i = 0; i < height; i++) {
+          if (gridState[col][i] === "") {
+              return i;
+          }
       }
-    }
-    return -1; // Column is full
-  };
+  }
+  return -1; // Column is full
+};
 
   /////////////////////////////////////////////////////////// Chat GPT assisted Win conditions scan
 
@@ -148,8 +152,9 @@ const handleCellClick = (col) => {
     return false;
   };
 
-  ///Layout Generator
 
+
+  ///Layout Generator//////////////////////////////////////////////////////////////////////////////////
 
   const generateLayout = () => {
     const grid = [];
